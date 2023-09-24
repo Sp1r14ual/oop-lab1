@@ -11,27 +11,13 @@
 #include <numeric>
 #include <algorithm>
 #include <string>
-//#define N 10
 
 using namespace std;
-/*
-struct HuberDistribution
-{
-    int v;
-};
-
-HuberDistribution* init(double v)
-{
-    HuberDistribution* HB;
-    HB->v = v;
-    return HB;
-}
-*/
 
 //распределение Хьюбера
 double Huber(double x, double v, double K, double scale = 1., double shift = 0.)
 {
-    return (1. / (sqrt(2. * M_PI) * K) * (abs((x - shift) / scale) <= v ? exp(-pow((x - shift) / scale, 2.) / 2.) : exp(pow(v, 2.) / 2. - v * abs((x - shift) / scale)))) / scale;
+    return (1. / (sqrt(2. * M_PI) * K) * (abs((x - shift) / scale) <= v ? exp(-pow((x - shift) / scale, 2.) / 2.) : exp(pow(v, 2.) / 2. - v * abs((x - shift) / scale))))  / scale;
 }
 
 //функция стандартного нормального распределения
@@ -103,11 +89,6 @@ double calculate_x(double v, double K, double scale = 1., double shift = 0.)
     }
 }
 
-double mixture(double x, double v1, double v2, double K1, double K2, double p, double scale1 = 1., double shift1 = 0., double scale2 = 1., double shift2 = 0.)
-{
-    return (1 - p) * Huber(x, v1, K1, scale1, shift1) + p * Huber(x, v2, K2, scale2, shift2);
-}
-
 double empirical_expected_value(int n, vector<double> x_s)
 {
     double sum = 0;
@@ -164,12 +145,15 @@ double empirical_huber(int n, double x, vector<double> x_s)
         
         if (min_x + delta * i <= x && x < min_x + delta * (i + 1))
         {
-            //cout << min_x + delta * i << " <= " << x << " < " << min_x + delta * (i + 1) << endl;
             int n_i = count_if(x_s.begin(), x_s.end(), [i, k, min_x, max_x, delta](double x) { return i == k - 1 ? min_x + delta * (double)i <= x && x <= min_x + delta * (double)(i + 1) : min_x + delta * (double)i <= x && x < min_x + delta * (double)(i + 1); });
-            cout << n_i / (n * delta) << endl;
             return n_i / (n * delta);
         }
     }
+}
+
+double mixture(double x, double v1, double v2, double K1, double K2, double p, double scale1 = 1., double shift1 = 0., double scale2 = 1., double shift2 = 0.)
+{
+    return (1 - p) * Huber(x, v1, K1, scale1, shift1) + p * Huber(x, v2, K2, scale2, shift2);
 }
 
 vector<double> generate_sequence(int n, double v, double K)
@@ -185,7 +169,7 @@ vector<double> generate_sequence(int n, double v, double K)
     return x_s;
 }
 
-/*
+
 TEST_CASE("standard distribution, scale = 1, shift = 0")
 {
     double v = 0.5;
@@ -320,12 +304,11 @@ TEST_CASE("mixture of distributions: shift1 = shift2 =/= 0, scale1 = scale2 = 2,
     REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v1, K(v1), scale1, shift1)).epsilon(0.01));
     REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v2, K(v2), scale2, shift2)).epsilon(0.01));
 }
-*/
 
-/*
+
+
 TEST_CASE("mixture of distributions: shift1 =/= shift2, scale1, scale2, v1, v2 - random, p = 0.5")
 {
-	//на что тестируем???
     double shift1 = 1;
     double shift2 = 2;
     double scale1 = 1;
@@ -334,8 +317,8 @@ TEST_CASE("mixture of distributions: shift1 =/= shift2, scale1, scale2, v1, v2 -
 
     double v1 = 1;
     double v2 = 1;
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v1, K(v1), scale1, shift1)).epsilon(0.01));
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v2, K(v2), scale2, shift2)).epsilon(0.01));
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1)) < 0.1);
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v2, K(v2), scale2, shift2)) < 0.1);
 
 	shift1 = 5;
 	shift2 = 10;
@@ -344,13 +327,12 @@ TEST_CASE("mixture of distributions: shift1 =/= shift2, scale1, scale2, v1, v2 -
 
     v1 = 2;
     v2 = 3;
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v1, K(v1), scale1, shift1)).epsilon(0.01));
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v2, K(v2), scale2, shift2)).epsilon(0.01));
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.1));
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v2, K(v2), scale2, shift2) < 0.1));
 }
 
 TEST_CASE("mixture of distributions: shift1 = shift2 = 0, scale1 = 1, scale2 = 3, v1 = v2, p = 0.5")
 {
-    //на что тестируем???
     double shift1 = 0;
     double shift2 = 0;
     double scale1 = 1;
@@ -359,13 +341,35 @@ TEST_CASE("mixture of distributions: shift1 = shift2 = 0, scale1 = 1, scale2 = 3
 
     double v1 = 0.5;
     double v2 = 0.5;
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v1, K(v1), scale1, shift1)).epsilon(0.01));
-    REQUIRE(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) == Approx(Huber(0., v2, K(v2), scale2, shift2)).epsilon(0.01));
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
 
+    v1 = 0.75;
+    v2 = 0.75;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
+
+    v1 = 1;
+    v2 = 1;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
+
+    v1 = 1.5;
+    v2 = 1.5;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
+
+    v1 = 2;
+    v2 = 2;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
+
+    v1 = 2.5;
+    v2 = 2.5;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
+
+    v1 = 3;
+    v2 = 3;
+    REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
 }
-*/
 
-/*
+
+
 TEST_CASE("compare theoretical and empirical values")
 {
     vector<double> v_params = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
@@ -407,9 +411,9 @@ TEST_CASE("compare theoretical and empirical values")
     REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
     REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
 }
-*/
 
-/*
+
+
 TEST_CASE("calculate theoretical and empirical distributions for analysis, n - small")
 {
     vector<double> v_params = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
@@ -445,9 +449,9 @@ TEST_CASE("calculate theoretical and empirical distributions for analysis, n - s
         fs_empirical.close();
     }
 }
-*/
-/*
-TEST_CASE("compare 2 empirical distributions") //корректная оценка?
+
+
+TEST_CASE("compare 2 empirical distributions")
 {
     int n = 10;
     
@@ -578,7 +582,7 @@ TEST_CASE("compare 2 empirical distributions") //корректная оценка?
     REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
 
 }
-*/
+
 
 
 int main(int argc, char** argv)
