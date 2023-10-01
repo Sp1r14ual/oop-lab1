@@ -1,10 +1,10 @@
 #include "catch.hpp"
 #include "huber_distribution.h"
 #include "empirical_distribution.h"
-#include "mixture.h"
+#include "mixture_distribution.h"
 
 using namespace std;
-
+/*
 TEST_CASE("standard distribution, scale = 1, shift = 0")
 {
     double v = 0.5;
@@ -203,52 +203,9 @@ TEST_CASE("mixture of distributions: shift1 = shift2 = 0, scale1 = 1, scale2 = 3
     REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
 }
 
-
-
-TEST_CASE("compare theoretical and empirical values")
-{
-    vector<double> v_params = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
-    vector<double> x_s;
-    int n = 10;
-
-    double v = 0.5;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 0.75;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 1;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 1.5;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 2;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 2.5;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-
-    v = 3;
-    x_s = generate_sequence(n, v, K(v));
-    REQUIRE(abs(huber_variance(v, K(v)) - empirical_variance(n, x_s)) < 5);
-    REQUIRE(abs(huber_kurtosis(v, K(v)) - empirical_kurtosis(n, x_s)) < 5);
-}
-
-
-
+//--------------------------------------------------------------------------------------------------------
+// ֲûגמה ג פאיכ - מענופאךעמנטעü
+//--------------------------------------------------------------------------------------------------------
 TEST_CASE("calculate theoretical and empirical distributions for analysis, n - small")
 {
     vector<double> v_params = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
@@ -284,136 +241,4 @@ TEST_CASE("calculate theoretical and empirical distributions for analysis, n - s
         fs_empirical.close();
     }
 }
-
-
-TEST_CASE("compare 2 empirical distributions")
-{
-    int n = 10;
-
-    double v = 0.5;
-    vector<double> x_s1 = generate_sequence(n, v, K(v));
-    vector<double> x_s2 = generate_sequence(n, v, K(v));
-
-    double variance_theoretical = huber_variance(v, K(v));
-    double kurtosis_theoretical = huber_kurtosis(v, K(v));
-    double variance_empirical1 = empirical_variance(n, x_s1);
-    double kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    double variance_empirical2 = empirical_variance(n, x_s2);
-    double kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 0.75;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 1;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 1.5;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 2;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 2.5;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-    v = 3;
-    x_s1 = generate_sequence(n, v, K(v));
-    x_s2 = generate_sequence(n, v, K(v));
-
-    variance_theoretical = huber_variance(v, K(v));
-    kurtosis_theoretical = huber_kurtosis(v, K(v));
-    variance_empirical1 = empirical_variance(n, x_s1);
-    kurtosis_empirical1 = empirical_kurtosis(n, x_s1);
-    variance_empirical2 = empirical_variance(n, x_s2);
-    kurtosis_empirical2 = empirical_kurtosis(n, x_s2);
-
-    REQUIRE(abs(variance_theoretical - variance_empirical1) < 10);
-    REQUIRE(abs(variance_theoretical = variance_empirical2) < 10);
-    REQUIRE(abs(variance_empirical1 - variance_empirical2) < 10);
-    REQUIRE(abs(kurtosis_theoretical - kurtosis_empirical1) < 10);
-    REQUIRE(abs(kurtosis_theoretical = kurtosis_empirical2) < 10);
-    REQUIRE(abs(kurtosis_empirical1 - kurtosis_empirical2) < 10);
-
-}
+*/

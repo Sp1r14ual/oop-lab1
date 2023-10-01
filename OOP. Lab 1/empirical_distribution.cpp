@@ -61,3 +61,16 @@ double empirical_huber(int n, double x, vector<double> x_s)
         }
     }
 }
+
+vector<double> generate_sequence(int n, HuberDistribution* HB)
+{
+    vector<double> x_s;
+
+    for (int i = 0; i < n; i++)
+    {
+        double x = calculate_x(HB);
+        x_s.push_back(x);
+    }
+
+    return x_s;
+}

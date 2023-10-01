@@ -11,31 +11,24 @@ struct HuberDistribution
 	double shift;
 };
 
-struct Mixture
-{
-	double p;
-	HuberDistribution HB1;
-	HuberDistribution HB2;
-};
+HuberDistribution* init_huber_distribution(double v, double K, double scale = 1, double shift = 0);
 
-double Huber(double x, double v, double K, double scale = 1., double shift = 0.);
+double Huber(double x, HuberDistribution* HB);
 
 double phi(double x);
 
 double phi_lower(double x);
 
-double huber_expected_value(double shift);
+double huber_expected_value(HuberDistribution* HB);
 
-double huber_variance(double v, double K);
+double huber_variance(HuberDistribution* HB);
 
-double huber_asymmetry();
+double huber_asymmetry(HuberDistribution* HB);
 
-double huber_kurtosis(double v, double K);
+double huber_kurtosis(HuberDistribution* HB);
 
-double P(double v, double K);
+double P(HuberDistribution* HB);
 
 double K(double v);
 
-double calculate_x(double v, double K, double scale = 1., double shift = 0.);
-
-vector<double> generate_sequence(int n, double v, double K);
+double calculate_x(HuberDistribution* HB);

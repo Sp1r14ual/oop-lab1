@@ -130,15 +130,17 @@
     <ClCompile Include="distribution_tests.cpp" />
     <ClCompile Include="empirical_distribution.cpp" />
     <ClCompile Include="huber_distribution.cpp" />
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mixture.cpp" />
+    <ClCompile Include="mixture_distribution.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="catch.hpp" />
     <ClInclude Include="empirical_distribution.h" />
     <ClInclude Include="huber_distribution.h" />
+    <ClInclude Include="interface.h" />
     <ClInclude Include="lib.h" />
-    <ClInclude Include="mixture.h" />
+    <ClInclude Include="mixture_distribution.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
