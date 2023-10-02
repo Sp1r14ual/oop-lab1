@@ -202,43 +202,4 @@ TEST_CASE("mixture of distributions: shift1 = shift2 = 0, scale1 = 1, scale2 = 3
     v2 = 3;
     REQUIRE(abs(mixture(0., v1, v2, K(v1), K(v2), p, scale1, shift1, scale2, shift2) - Huber(0., v1, K(v1), scale1, shift1) < 0.001));
 }
-
-//--------------------------------------------------------------------------------------------------------
-// ֲûגמה ג פאיכ - מענופאךעמנטעü
-//--------------------------------------------------------------------------------------------------------
-TEST_CASE("calculate theoretical and empirical distributions for analysis, n - small")
-{
-    vector<double> v_params = { 0.5, 0.75, 1, 1.5, 2, 2.5, 3 };
-    vector<double> x_s;
-    int n = 100;
-
-    ofstream xs;
-    ofstream fs_theoretical;
-    ofstream fs_empirical;
-
-    for (double& v : v_params)
-    {
-        xs.open("xs v=" + to_string(v) + ".txt");
-        fs_theoretical.open("fs_theoretical v=" + to_string(v) + ".txt");
-        fs_empirical.open("fs_empirical v=" + to_string(v) + ".txt");
-
-        x_s = generate_sequence(n, v, K(v));
-        sort(x_s.begin(), x_s.end());
-
-        for (double& x : x_s)
-        {
-            xs << x << endl;
-
-            double f_theoretical = Huber(x, v, K(v));
-            fs_theoretical << f_theoretical << endl;
-
-            double f_empirical = empirical_huber(n, x, x_s);
-            fs_empirical << f_empirical << endl;
-        }
-
-        xs.close();
-        fs_theoretical.close();
-        fs_empirical.close();
-    }
-}
 */
