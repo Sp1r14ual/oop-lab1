@@ -47,7 +47,6 @@ void general_distribution()
 void mixture_distribution()
 {
 	int n = 100;
-	int mixture_params_option;
 	double v1, scale1, shift1, v2, scale2, shift2, x, p;
 	vector<double> x_s;
 	Mixture* M;
