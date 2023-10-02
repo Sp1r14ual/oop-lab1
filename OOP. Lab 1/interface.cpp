@@ -27,7 +27,7 @@ void file_output_distribution(int n, vector<double>& x_s, HuberDistribution* HB)
 	fs_theoretical.close();
 	fs_empirical.close();
 }
-//Доработать вывод смеси в файл
+
 void file_output_mixture(int n, vector<double>& x_s, Mixture* M) 
 {
 	ofstream xs;
