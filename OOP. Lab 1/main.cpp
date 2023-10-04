@@ -11,8 +11,8 @@ int main(int argc, char** argv)
 	setlocale(LC_ALL, "ru");
 	interface();
 
-    //int result = Catch::Session().run(argc, argv);
-    //return result;
+    int result = Catch::Session().run(argc, argv);
+    return result;
 
-	return 0;
+	//return 0;
 }

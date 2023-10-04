@@ -58,7 +58,7 @@ void file_output_mixture(int n, vector<double>& x_s, Mixture* M)
 
 void general_distribution()
 {
-	int n = 100;
+	int n = 30000;
 	int distribution_params_option;
 	int file_option;
 	double v, scale, shift, x;
@@ -110,7 +110,7 @@ void general_distribution()
 
 void mixture_distribution()
 {
-	int n = 100;
+	int n = 1000;
 	int file_option;
 	double v1, scale1, shift1, v2, scale2, shift2, x, p;
 	vector<double> x_s;
@@ -120,7 +120,6 @@ void mixture_distribution()
 	cin >> v1 >> scale1 >> shift1 >> v2 >> scale2 >> shift2 >> p >> x;
 	M = init_mixture(p, v1, v2, scale1, scale2, shift1, shift2);
 
-	//Какое распределение брать???
 	x_s = generate_sequence(n, M->HB1);
 
 	cout << "Для смеси распределений: " << endl;

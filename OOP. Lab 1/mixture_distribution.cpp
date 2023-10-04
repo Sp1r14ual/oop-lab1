@@ -41,7 +41,6 @@ double mixture_variance(Mixture* M)
 		huber_variance(M->HB2)) - pow(mixture_expected_value(M), 2);
 }
 
-//ѕроверить на правильность, возможно опечаталс€
 double mixture_asymmetry(Mixture* M)
 {
 	return ((1 - M->p) * (pow((huber_expected_value(M->HB1) - mixture_expected_value(M)), 3) + 3 * (huber_expected_value(M->HB1) -
@@ -50,7 +49,6 @@ double mixture_asymmetry(Mixture* M)
 			huber_variance(M->HB2) + pow(huber_variance(M->HB2), 3 / 2) * huber_asymmetry(M->HB2))) /pow(mixture_variance(M), 3 / 2);
 }
 
-//¬озможна опечатка в формуле
 double mixture_kurtosis(Mixture* M)
 {
 	return ((1 - M->p) * (pow((huber_expected_value(M->HB1) - mixture_expected_value(M)), 4) + 6 * huber_variance(M->HB1) * 
